@@ -39,7 +39,8 @@
        "message": "All movies data found successfully",
        "result": [
            {
-               "id": "6495fb7f92363e4d61748694",
+               "id": "6499a57d5306cdc7978330e6",
+               "creatorUserId": "6499a4915306cdc7978330e0",
                "title": "Harry Potter",
                "description": "It's magic!"
            }
@@ -73,7 +74,8 @@
    {
        "message": "Movie found successfully",
        "result": {
-           "id": "6495fb7f92363e4d61748694",
+           "id": "6499a57d5306cdc7978330e6",
+           "creatorUserId": "6499a4915306cdc7978330e0",
            "title": "Harry Potter",
            "description": "It's magic!"
        },
@@ -112,7 +114,8 @@
    {
        "message": "Movie has been created successfully",
        "result": {
-           "id": "6495fb7f92363e4d61748694",
+           "id": "6499a57d5306cdc7978330e6",
+           "creatorUserId": "6499a4915306cdc7978330e0",
            "title": "Harry Potter",
            "description": "It's magic!"
        },
@@ -126,6 +129,8 @@
    <summary><bold>——</bold> Пример ответа при некорректном <code>access_token</code></summary>
 
    ```http
+   401 Unauthorized
+
    {
        "message": "Unauthorized",
        "statusCode": 401
@@ -163,6 +168,7 @@
        "message": "Movie has been successfully updated",
        "result": {
            "id": "6495fb7f92363e4d61748694",
+           "creatorUserId": "6499a4915306cdc7978330e0",
            "title": "Harry Potter",
            "description": "It's magic! More magic!"
        },
@@ -176,9 +182,25 @@
    <summary><bold>——</bold> Пример ответа при некорректном <code>access_token</code></summary>
 
    ```http
+   401 Unauthorized
+
    {
        "message": "Unauthorized",
        "statusCode": 401
+   }
+   ```
+
+   </details>
+
+   <details>
+   <summary><bold>——</bold> Пример ответа при запросе к чужому фильму</summary>
+
+   ```http
+   403 Forbidden
+
+   {
+       "message": "Forbidden",
+       "statusCode": 403
    }
    ```
 
@@ -209,6 +231,7 @@
        "message": "Movie deleted successfully",
        "result": {
            "id": "6495fb7f92363e4d61748694",
+           "creatorUserId": "6499a4915306cdc7978330e0",
            "title": "Harry Potter",
            "description": "It's magic! More magic!"
        },
@@ -222,9 +245,25 @@
    <summary><bold>——</bold> Пример ответа при некорректном <code>access_token</code></summary>
 
    ```http
+   401 Unauthorized
+
    {
        "message": "Unauthorized",
        "statusCode": 401
+   }
+   ```
+
+   </details>
+
+   <details>
+   <summary><bold>——</bold> Пример ответа при запросе к чужому фильму</summary>
+
+   ```http
+   403 Forbidden
+
+   {
+       "message": "Forbidden",
+       "statusCode": 403
    }
    ```
 
@@ -264,6 +303,7 @@
    {
        "message": "Account has been created successfully",
        "result": {
+           "id": "6499a4915306cdc7978330e0",
            "login": "login",
            "username": "user"
        },
@@ -362,6 +402,7 @@
    {
        "message": "OK",
        "result": {
+           "id": "6499a4915306cdc7978330e0",
            "login": "login",
            "username": "user"
        },

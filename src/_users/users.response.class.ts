@@ -1,10 +1,11 @@
 export class ResUser {
+  readonly id: string;
   readonly login: string;
   readonly username: string;
-  readonly password: string;
 
   constructor(obj: any) {
-    this.login = obj?.login || obj?.sub;
+    this.id = obj?._id || obj?.sub;
+    this.login = obj?.login;
     this.username = obj?.username;
   }
 }

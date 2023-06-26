@@ -1,13 +1,14 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { CreateMovieRawDto } from './movies.dto.create-movie-raw';
 
-export class CreateMovieDto {
+export class CreateMovieDto extends CreateMovieRawDto {
   @IsString()
   @MaxLength(64)
   @IsNotEmpty()
-  readonly title: string;
+  readonly creatorUserId: string;
 
-  @IsString()
-  @MaxLength(256)
-  @IsNotEmpty()
-  readonly description: string;
+  constructor(createMovieRawDto: CreateMovieRawDto, creatorUserId: string) {
+    super(createMovieRawDto);
+    this.creatorUserId = creatorUserId;
+  }
 }
