@@ -1,54 +1,69 @@
 import { HttpStatus } from '@nestjs/common';
-import {
-  BaseResponseBodyCRdto,
-  ResultPropertyRaw,
-} from './dto.response.base-obj';
+import { ApiProperty } from '@nestjs/swagger';
+import { UserResponse } from '../_users/dto.response.user';
+import { UserDocument } from '../_users/user';
+import { AccessTokenValue } from './jwt.access-token.type';
+import { AccessTokenResponse } from './dto.response.access-token';
+
+export interface IResponseCRdto {
+  message: string;
+  result?: UserResponse | AccessTokenResponse;
+  statusCode: number;
+}
 
 // Successful responses
 
-export class LoginCRdto extends BaseResponseBodyCRdto {
+export class LoginCRdto implements IResponseCRdto {
+  @ApiProperty({ default: 'Login completed successfully' })
   readonly message: string = 'Login completed successfully';
+  @ApiProperty({ default: HttpStatus.OK })
   readonly statusCode: number = HttpStatus.OK;
+  @ApiProperty({ type: AccessTokenResponse })
+  readonly result: AccessTokenResponse;
 
-  constructor(resultPropertyRaw: ResultPropertyRaw) {
-    super(resultPropertyRaw);
+  constructor(accessToken: AccessTokenValue) {
+    this.result = new AccessTokenResponse(accessToken);
   }
 }
 
-export class SignUpCRdto extends BaseResponseBodyCRdto {
+export class SignUpCRdto implements IResponseCRdto {
+  @ApiProperty({ default: 'Account has been created successfully' })
   readonly message: string = 'Account has been created successfully';
+  @ApiProperty({ default: HttpStatus.CREATED })
   readonly statusCode: number = HttpStatus.CREATED;
+  @ApiProperty({ type: UserResponse })
+  readonly result: UserResponse;
 
-  constructor(resultPropertyRaw: ResultPropertyRaw) {
-    super(resultPropertyRaw);
+  constructor(user: UserDocument) {
+    this.result = new UserResponse(user);
   }
 }
 
-export class GetMeCRdto extends BaseResponseBodyCRdto {
+export class GetMeCRdto implements IResponseCRdto {
+  @ApiProperty({ default: 'OK' })
   readonly message: string = 'OK';
+  @ApiProperty({ default: HttpStatus.OK })
   readonly statusCode: number = HttpStatus.OK;
+  @ApiProperty({ type: UserResponse })
+  readonly result: UserResponse;
 
-  constructor(resultPropertyRaw: ResultPropertyRaw) {
-    super(resultPropertyRaw);
+  constructor(user: UserDocument) {
+    this.result = new UserResponse(user);
   }
 }
 
 // Exceptions
 
-export class UnauthorizedExceptionCRdto extends BaseResponseBodyCRdto {
+export class UnauthorizedExceptionCRdto implements IResponseCRdto {
+  @ApiProperty({ default: 'Unauthorized' })
   readonly message: string = 'Unauthorized';
+  @ApiProperty({ default: HttpStatus.UNAUTHORIZED })
   readonly statusCode: number = HttpStatus.UNAUTHORIZED;
-
-  constructor() {
-    super(undefined);
-  }
 }
 
-export class BadRequestExceptionCRdto extends BaseResponseBodyCRdto {
+export class BadRequestExceptionCRdto implements IResponseCRdto {
+  @ApiProperty({ default: 'Login or username exists' })
   readonly message: string = 'Login or username exists';
+  @ApiProperty({ default: HttpStatus.BAD_REQUEST })
   readonly statusCode: number = HttpStatus.BAD_REQUEST;
-
-  constructor() {
-    super(undefined);
-  }
 }

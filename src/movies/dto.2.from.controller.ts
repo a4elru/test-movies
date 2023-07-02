@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsMongoId } from 'class-validator';
 import { Types } from 'mongoose';
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/swagger';
 import { CreateMovieRCdto, MovieIdRCdto } from './dto.1.from.request';
 
 /**

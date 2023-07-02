@@ -16,12 +16,22 @@ import { Public } from '../auth/decorator.public-route';
 import * as RC from './dto.1.from.request';
 import { CreateMovieCSdto } from './dto.2.from.controller';
 import * as CR from './dto.out.to.response';
+import { UnauthorizedExceptionCRdto } from '../auth/dto.out.to.response';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @Controller('movies')
+@ApiTags('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @ApiResponse({ status: 201, type: CR.CreateMovieCRdto })
+  @ApiResponse({ status: 401, type: UnauthorizedExceptionCRdto })
   async createMovie(
     @Req() request: RequestWithUser,
     @Res() response: ResponseWithEnvelope,
@@ -38,6 +48,7 @@ export class MoviesController {
 
   @Public()
   @Get()
+  @ApiResponse({ status: 200, type: CR.GetAllMoviesCRdto })
   async getAllMovies(@Res() response: ResponseWithEnvelope) {
     const allMovies = await this.moviesService.getAllMovies();
     return response.envelope(new CR.GetAllMoviesCRdto(allMovies));
@@ -45,6 +56,8 @@ export class MoviesController {
 
   @Public()
   @Get('/:id')
+  @ApiResponse({ status: 200, type: CR.GetMovieCRdto })
+  @ApiResponse({ status: 404, type: CR.NotFoundExceptionCRdto })
   async getMovie(
     @Res() response: ResponseWithEnvelope,
     @Param() movieIdRCdto: RC.MovieIdRCdto,
@@ -57,6 +70,11 @@ export class MoviesController {
   }
 
   @Put('/:id')
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: CR.UpdateMovieCRdto })
+  @ApiResponse({ status: 401, type: UnauthorizedExceptionCRdto })
+  @ApiResponse({ status: 403, type: CR.ForbiddenExceptionCRdto })
+  @ApiResponse({ status: 404, type: CR.NotFoundExceptionCRdto })
   async updateMovie(
     @Req() request: RequestWithUser,
     @Res() response: ResponseWithEnvelope,
@@ -82,6 +100,11 @@ export class MoviesController {
   }
 
   @Delete('/:id')
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: CR.DeleteMovieCRdto })
+  @ApiResponse({ status: 401, type: UnauthorizedExceptionCRdto })
+  @ApiResponse({ status: 403, type: CR.ForbiddenExceptionCRdto })
+  @ApiResponse({ status: 404, type: CR.NotFoundExceptionCRdto })
   async deleteMovie(
     @Req() request: RequestWithUser,
     @Res() response: ResponseWithEnvelope,

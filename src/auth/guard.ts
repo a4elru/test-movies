@@ -10,6 +10,8 @@ import { Request } from 'express';
 import { IS_PUBLIC_KEY } from './decorator.public-route';
 import { Reflector } from '@nestjs/core';
 import { JwtPayload } from './jwt.payload';
+import { ResponseWithEnvelope } from './middleware.envelope';
+import { UnauthorizedExceptionCRdto } from './dto.out.to.response'
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -25,9 +27,11 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
+    const response: ResponseWithEnvelope = context.switchToHttp().getResponse();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
-      throw new UnauthorizedException();
+      response.envelope(new UnauthorizedExceptionCRdto());
+      return false;
     }
     try {
       const payload: JwtPayload = await this.jwtService.verifyAsync(token, {
@@ -35,7 +39,8 @@ export class AuthGuard implements CanActivate {
       });
       request['user'] = payload;
     } catch {
-      throw new UnauthorizedException();
+      response.envelope(new UnauthorizedExceptionCRdto());
+      return false;
     }
     return true;
   }

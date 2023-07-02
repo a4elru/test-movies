@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { BaseResponseBodyCRdto } from './dto.response.base-obj';
+import { IResponseCRdto } from './dto.out.to.response';
 
 export function addEnvelope(
   req: Request,
@@ -10,10 +10,14 @@ export function addEnvelope(
   next();
 }
 
+/**
+ * @prop **envelope**: *(jsonObj: IResponseCRdto) => any*
+ * @extends Response {@link Response}
+ */
 export interface ResponseWithEnvelope extends Response {
-  envelope: (jsonObj: BaseResponseBodyCRdto) => any;
+  envelope: (jsonObj: IResponseCRdto) => any;
 }
 
-function envelope(jsonObj: BaseResponseBodyCRdto) {
+function envelope(jsonObj: IResponseCRdto) {
   return this.status(jsonObj.statusCode).json(jsonObj);
 }

@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 /**
  * Login**RCS**dto:
@@ -12,11 +13,13 @@ export class LoginRCSdto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(64)
+  @ApiProperty({ example: 'LOGIN' })
   readonly login: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(64)
+  @ApiProperty({ example: 'PASSWORD' })
   readonly password: string;
 
   constructor(login: string, password: string) {
@@ -30,12 +33,13 @@ export class LoginRCSdto {
  * - **1.** from **R**equest - to **C**onstroller.
  * - **2.** from **C**ontroller - to **S**ervice.
  * @prop readonly **username**: *string*
- * @extends LoginRCSdto {{@link LoginRCSdto}
+ * @extends LoginRCSdto {@link LoginRCSdto}
  */
 export class SignUpRCSdto extends LoginRCSdto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(64)
+  @ApiProperty({ example: 'USERNAME' })
   readonly username: string;
 
   constructor(login: string, password: string, username: string) {

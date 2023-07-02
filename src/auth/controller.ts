@@ -6,13 +6,21 @@ import { Public } from './decorator.public-route';
 import * as RC from './dto.in.1.from.request';
 import { GetMeCSdto } from './dto.in.2.from.controller';
 import * as CR from './dto.out.to.response';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiResponse,
+} from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
   @Post('login')
+  @ApiResponse({ status: 200, type: CR.LoginCRdto })
+  @ApiResponse({ status: 401, type: CR.UnauthorizedExceptionCRdto })
   async login(
     @Res() response: ResponseWithEnvelope,
     @Body() loginRCSdto: RC.LoginRCSdto,
@@ -26,6 +34,8 @@ export class AuthController {
 
   @Public()
   @Post('sign-up')
+  @ApiResponse({ status: 201, type: CR.SignUpCRdto })
+  @ApiResponse({ status: 400, type: CR.BadRequestExceptionCRdto })
   async signUp(
     @Res() response: ResponseWithEnvelope,
     @Body() signUpRCSdto: RC.SignUpRCSdto,
@@ -38,6 +48,9 @@ export class AuthController {
   }
 
   @Get('me')
+  @ApiBearerAuth()
+  @ApiResponse({ status: 200, type: CR.GetMeCRdto })
+  @ApiResponse({ status: 401, type: CR.UnauthorizedExceptionCRdto })
   async getMe(
     @Req() request: RequestWithUser,
     @Res() response: ResponseWithEnvelope,
