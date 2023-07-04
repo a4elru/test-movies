@@ -5,7 +5,7 @@ const example = {
   id: '542c2b97bac0595474108b48',
   login: 'LOGIN',
   username: 'USERNAME',
-}
+};
 
 export class UserResponse {
   @ApiProperty({ example: example.id })

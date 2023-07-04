@@ -27,22 +27,69 @@ export class CreateMovieRCdto {
 }
 
 /**
- * SignUp**RCS**dto:
+ * UpdateMovie**RC**dto:
  * - **1.** from **R**equest - to **C**onstroller.
- * - **2.** from **C**ontroller - to **S**ervice.
  * @extends CreateMovieRCdto PartialType({@link CreateMovieRCdto})
  */
 export class UpdateMovieRCdto extends PartialType(CreateMovieRCdto) {}
 
 /**
- * MovieId**RCS**dto:
+ * MovieId**RC**dto:
  * - **1.** from **R**equest - to **C**onstroller.
- * @prop readonly **id**: *string*
+ * @prop readonly **movieId**: *string*
  */
 export class MovieIdRCdto {
   @IsString()
   @IsNotEmpty()
   @IsMongoId()
   @ApiProperty({ example: '542c2b97bac0595474108b48' })
-  readonly id: string;
+  readonly movieId: string;
+
+  constructor(movieId: string) {
+    this.movieId = movieId;
+  }
+
+  static fromRemoveImageForMovieRCdto(
+    removeImageForMovieRCdto: RemoveImageForMovieRCdto,
+  ): MovieIdRCdto {
+    const result = new MovieIdRCdto(removeImageForMovieRCdto.movieId);
+    return result;
+  }
+}
+
+/**
+ * ImageId**RC**dto:
+ * - **1.** from **R**equest - to **C**onstroller.
+ * @prop readonly **imageId**: *string*
+ */
+export class RemoveImageForMovieRCdto extends MovieIdRCdto {
+  @IsString()
+  @IsNotEmpty()
+  @IsMongoId()
+  @ApiProperty({ example: '542c2b97bac0595474108b50' })
+  readonly imageId: string;
+}
+
+export class ImageIdRCdto {
+  @IsString()
+  @IsNotEmpty()
+  @IsMongoId()
+  @ApiProperty({ example: '542c2b97bac0595474108b50' })
+  readonly imageId: string;
+
+  constructor(imageId: string) {
+    this.imageId = imageId;
+  }
+
+  static fromRemoveImageForMovieRCdto(
+    removeImageForMovieRCdto: RemoveImageForMovieRCdto,
+  ): ImageIdRCdto {
+    const result = new ImageIdRCdto(removeImageForMovieRCdto.imageId);
+    return result;
+  }
+}
+
+export class AddImageForMovieRCdto {
+  @ApiProperty({ type: 'string', format: 'binary', required: true })
+  image: Express.Multer.File;
 }

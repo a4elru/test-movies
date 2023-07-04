@@ -6,7 +6,7 @@ const example = {
   creatorUserId: '542c2b97bac0595474108b42',
   title: 'The Title',
   description: 'The description',
-}
+};
 
 export class MovieResponse {
   @ApiProperty({ example: example.id })

@@ -6,11 +6,7 @@ import { Public } from './decorator.public-route';
 import * as RC from './dto.in.1.from.request';
 import { GetMeCSdto } from './dto.in.2.from.controller';
 import * as CR from './dto.out.to.response';
-import {
-  ApiTags,
-  ApiBearerAuth,
-  ApiResponse,
-} from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('auth')

@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty, IsMongoId } from 'class-validator';
 import { Types } from 'mongoose';
 import { PartialType } from '@nestjs/swagger';
-import { CreateMovieRCdto, MovieIdRCdto } from './dto.1.from.request';
+import { CreateMovieRCdto } from './dto.1.from.request';
 
 /**
  * CreateMovie*CS*dto:
@@ -29,5 +29,3 @@ export class CreateMovieCSdto extends CreateMovieRCdto {
 }
 
 export class UpdateMovieCSdto extends PartialType(CreateMovieRCdto) {}
-
-export class MovieIdCSdto extends MovieIdRCdto {}
