@@ -1,18 +1,13 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Movie, MovieSchema } from './movie';
 import { MoviesService } from './service';
 import { MoviesController } from './controller';
 import { addEnvelope } from './middleware.envelope';
 import { StaticModule } from 'src/_static/module';
-import { ImagesModule } from 'src/_images/module';
+import { DBImagesModule } from 'src/_db/images/module';
+import { DBMoviesModule } from 'src/_db/movies/module';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Movie.name, schema: MovieSchema }]),
-    StaticModule,
-    ImagesModule,
-  ],
+  imports: [DBMoviesModule, StaticModule, DBImagesModule],
   providers: [MoviesService],
   controllers: [MoviesController],
 })

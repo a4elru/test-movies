@@ -1,13 +1,10 @@
 import { HttpStatus } from '@nestjs/common';
-import {
-  ImageIdRCdto,
-  MovieIdRCdto,
-} from './dto.1.from.request';
+import { ImageIdRCdto, MovieIdRCdto } from './dto.1.from.request';
 import { ApiProperty } from '@nestjs/swagger';
-import { MovieResponse } from './dto.response.movie';
-import { MovieDocument } from './movie';
-import { ImageResponse } from 'src/_images/dto.response.image';
-import { ImageDocument } from 'src/_images/image';
+import { MovieResponse } from '../_db/movies/dto.response.movie';
+import { MovieDocument } from '../_db/movies/entity.movie';
+import { ImageResponse } from '../_db/images/dto.response.image';
+import { ImageDocument } from '../_db/images/entity.image';
 
 export interface IResponseCRdto {
   message: string;

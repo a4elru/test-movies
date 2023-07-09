@@ -1,5 +1,5 @@
 import { Module, MiddlewareConsumer } from '@nestjs/common';
-import { UsersModule } from '../_users/module';
+import { DBUsersModule } from '../_db/users/module';
 import { JwtModule } from '@nestjs/jwt';
 import { secret } from './jwt.constants';
 import { AuthService } from './service';
@@ -8,7 +8,7 @@ import { addEnvelope } from './middleware.envelope';
 
 @Module({
   imports: [
-    UsersModule,
+    DBUsersModule,
     JwtModule.register({
       global: true,
       secret: secret,

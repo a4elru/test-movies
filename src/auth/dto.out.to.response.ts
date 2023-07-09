@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserResponse } from '../_users/dto.response.user';
-import { UserDocument } from '../_users/user';
+import { UserResponse } from '../_db/users/dto.response.user';
+import { UserDocument } from '../_db/users/entity.user';
 import { AccessTokenValue } from './jwt.access-token.type';
 import { AccessTokenResponse } from './dto.response.access-token';
 

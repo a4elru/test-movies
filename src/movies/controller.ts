@@ -55,8 +55,8 @@ export class MoviesController {
   @Public()
   @Get()
   @ApiResponse({ status: 200, type: CR.GetAllMoviesCRdto })
-  async getAllMovies(@Res() response: ResponseWithEnvelope) {
-    const allMovies = await this.moviesService.getAllMovies();
+  async readAllMovies(@Res() response: ResponseWithEnvelope) {
+    const allMovies = await this.moviesService.readAllMovies();
     return response.envelope(new CR.GetAllMoviesCRdto(allMovies));
   }
 
@@ -64,11 +64,11 @@ export class MoviesController {
   @Get('/:movieId')
   @ApiResponse({ status: 200, type: CR.GetMovieCRdto })
   @ApiResponse({ status: 404, type: CR.NotFoundMovieExceptionCRdto })
-  async getMovie(
+  async readMovie(
     @Res() response: ResponseWithEnvelope,
     @Param() movieIdRCdto: RC.MovieIdRCdto,
   ) {
-    const existingMovie = await this.moviesService.getMovie(movieIdRCdto);
+    const existingMovie = await this.moviesService.readMovieById(movieIdRCdto);
     if (!existingMovie) {
       return response.envelope(
         new CR.NotFoundMovieExceptionCRdto(movieIdRCdto),
@@ -89,7 +89,7 @@ export class MoviesController {
     @Param() movieIdRCdto: RC.MovieIdRCdto,
     @Body() updateMovieRCdto: RC.UpdateMovieRCdto,
   ) {
-    const existingMovie = await this.moviesService.getMovie(movieIdRCdto);
+    const existingMovie = await this.moviesService.readMovieById(movieIdRCdto);
     if (!existingMovie) {
       return response.envelope(
         new CR.NotFoundMovieExceptionCRdto(movieIdRCdto),
@@ -122,7 +122,7 @@ export class MoviesController {
     @Res() response: ResponseWithEnvelope,
     @Param() movieIdRCdto: RC.MovieIdRCdto,
   ) {
-    const existingMovie = await this.moviesService.getMovie(movieIdRCdto);
+    const existingMovie = await this.moviesService.readMovieById(movieIdRCdto);
     if (!existingMovie) {
       return response.envelope(
         new CR.NotFoundMovieExceptionCRdto(movieIdRCdto),
@@ -162,7 +162,7 @@ export class MoviesController {
     @Body() body: RC.AddImageForMovieRCdto,
     @Param() movieIdRCdto: RC.MovieIdRCdto,
   ) {
-    const existingMovie = await this.moviesService.getMovie(movieIdRCdto);
+    const existingMovie = await this.moviesService.readMovieById(movieIdRCdto);
     if (!existingMovie) {
       return response.envelope(
         new CR.NotFoundMovieExceptionCRdto(movieIdRCdto),
@@ -196,7 +196,7 @@ export class MoviesController {
   ) {
     const movieIdRCdto =
       RC.MovieIdRCdto.fromRemoveImageForMovieRCdto(removeImageForMovie);
-    const existingMovie = await this.moviesService.getMovie(movieIdRCdto);
+    const existingMovie = await this.moviesService.readMovieById(movieIdRCdto);
     if (!existingMovie) {
       return response.envelope(
         new CR.NotFoundMovieExceptionCRdto(movieIdRCdto),
@@ -232,7 +232,7 @@ export class MoviesController {
     @Res() response: ResponseWithEnvelope,
     @Param() movieIdRCdto: RC.MovieIdRCdto,
   ) {
-    const existingMovie = await this.moviesService.getMovie(movieIdRCdto);
+    const existingMovie = await this.moviesService.readMovieById(movieIdRCdto);
     if (!existingMovie) {
       return response.envelope(
         new CR.NotFoundMovieExceptionCRdto(movieIdRCdto),
@@ -253,7 +253,7 @@ export class MoviesController {
   ) {
     const movieIdRCdto =
       RC.MovieIdRCdto.fromRemoveImageForMovieRCdto(removeImageForMovie);
-    const existingMovie = await this.moviesService.getMovie(movieIdRCdto);
+    const existingMovie = await this.moviesService.readMovieById(movieIdRCdto);
     if (!existingMovie) {
       return response.envelope(
         new CR.NotFoundMovieExceptionCRdto(movieIdRCdto),

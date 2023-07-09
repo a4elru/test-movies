@@ -1,13 +1,13 @@
 import * as R from './dto.in.1.from.request';
 import * as C from './dto.in.2.from.controller';
-import * as I from '../_users/dto.in.service';
+import * as I from '../_db/users/dto.in.service';
 
 /**
  * Login**SD**dto:
  * - **3.** from **S**ervice - to **D**atabase.
- * @implements {{@link I.IGetUserDto}
+ * @implements - {@link I.IReadUsersFilter}
  */
-export class LoginSDdto implements I.IGetUserDto {
+export class LoginSDdto implements I.IReadUsersFilter {
   readonly login: string;
 
   constructor(login: string) {
@@ -19,7 +19,7 @@ export class LoginSDdto implements I.IGetUserDto {
  * SignUp**SD**dto:
  * - **3.** from **S**ervice - to **D**atabase.
  * @extends SignUpRCSdto {@link R.SignUpRCSdto}
- * @implements {{@link I.ICreateUserDto}
+ * @implements - {@link I.ICreateUserDto}
  */
 export class SignUpSDdto extends R.SignUpRCSdto implements I.ICreateUserDto {
   static fromSignUpRCSdto(
@@ -34,4 +34,4 @@ export class SignUpSDdto extends R.SignUpRCSdto implements I.ICreateUserDto {
   }
 }
 
-export class GetMeSDdto extends C.GetMeCSdto implements I.IGetUserByIdDto {}
+export class GetMeSDdto extends C.GetMeCSdto implements I.IIdDto {}

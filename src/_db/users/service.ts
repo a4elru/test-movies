@@ -1,25 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from './user';
+import { User, UserDocument } from './entity.user';
 import * as I from './dto.in.service';
 import { MongoError } from 'mongodb';
 
 @Injectable()
-export class UsersService {
+export class DBUsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
-
-  async getUserById(
-    getUserByIdDto: I.IGetUserByIdDto,
-  ): Promise<UserDocument | null> {
-    const existingUser = await this.userModel.findById(getUserByIdDto.id);
-    return existingUser;
-  }
-
-  async getUser(getUserDto: I.IGetUserDto): Promise<UserDocument | null> {
-    const existingUser = await this.userModel.findOne(getUserDto);
-    return existingUser;
-  }
 
   async createUser(
     createUserDto: I.ICreateUserDto,
@@ -35,5 +23,17 @@ export class UsersService {
         throw err;
       }
     }
+  }
+
+  async readUserById(idDto: I.IIdDto): Promise<UserDocument | null> {
+    const existingUser = await this.userModel.findById(idDto.id);
+    return existingUser;
+  }
+
+  async readOneUser(
+    readUsersFilter: I.IReadUsersFilter,
+  ): Promise<UserDocument | null> {
+    const existingUser = await this.userModel.findOne(readUsersFilter);
+    return existingUser;
   }
 }

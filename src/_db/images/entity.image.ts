@@ -1,25 +1,28 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { SchemaTypes, Types, HydratedDocument } from 'mongoose';
+import { Movie } from '../movies/entity.movie';
 
 // Класс используется для создания mongoose-схемы и mongoose-модели.
 // Подробнее: https://docs.nestjs.com/techniques/mongodb#model-injection
 @Schema()
-export class User {
-  @Prop({ required: true, unique: true })
-  login: string;
+export class Image {
+  @Prop({ required: true, type: SchemaTypes.ObjectId, ref: Movie.name })
+  movieId: Types.ObjectId;
 
-  @Prop({ required: true, unique: true })
-  username: string;
-
-  @Prop({ required: true })
-  password: string;
+  @Prop({ unique: true })
+  link: string;
 }
 
 // Mongoose-схема.
 // Подробнее: https://mongoosejs.com/docs/guide.html
-export const UserSchema = SchemaFactory.createForClass(User);
+export const ImageSchema = SchemaFactory.createForClass(Image);
 
 // Mongoose-схема возвращает объекты этого типа.
 // Тип включает в себя свойство _id.
 // Подробнее: https://mongoosejs.com/docs/typescript.html
-export type UserDocument = HydratedDocument<User>;
+/**
+ * @prop **_id**: *ObjectID*
+ * @prop **movieId**: *ObjectId*
+ * @prop **link**: *string*
+ */
+export type ImageDocument = HydratedDocument<Image>;

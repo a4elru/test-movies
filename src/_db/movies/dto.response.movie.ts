@@ -1,4 +1,4 @@
-import { MovieDocument } from './movie';
+import { MovieDocument } from './entity.movie';
 import { ApiProperty } from '@nestjs/swagger';
 
 const example = {

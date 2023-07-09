@@ -1,4 +1,4 @@
-import { UserDocument } from './user';
+import { UserDocument } from './entity.user';
 import { ApiProperty } from '@nestjs/swagger';
 
 const example = {

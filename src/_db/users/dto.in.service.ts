@@ -1,28 +1,24 @@
 import { Types } from 'mongoose';
 
 /**
- * IGetUserByIdDto:
  * @prop readonly **id**: *ObjectID*
  */
-export interface IGetUserByIdDto {
+export interface IIdDto {
   readonly id: Types.ObjectId;
 }
 
 /**
- * IGetUserDto:
  * @prop readonly **login**: *string*
- */
-export interface IGetUserDto {
-  readonly login: string;
-}
-
-/**
- * ICreateUserDto:
  * @prop readonly **password**: *string*
  * @prop readonly **username**: *string*
- * @extends {{@link IGetUserDto}
  */
-export interface ICreateUserDto extends IGetUserDto {
+export interface ICreateUserDto {
+  readonly login: string;
   readonly password: string;
   readonly username: string;
 }
+
+/**
+ * @extends Partial<ICreateUserDto> {@link ICreateUserDto}
+ */
+export type IReadUsersFilter = Partial<ICreateUserDto>;

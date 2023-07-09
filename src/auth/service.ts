@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../_users/service';
-import { UserDocument } from '../_users/user';
+import { DBUsersService } from '../_db/users/service';
+import { UserDocument } from '../_db/users/entity.user';
 import { JwtService } from '@nestjs/jwt';
 import * as R from './dto.in.1.from.request';
 import * as C from './dto.in.2.from.controller';
@@ -13,13 +13,13 @@ import { AccessTokenValue } from './jwt.access-token.type';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private dbUsersService: DBUsersService,
     private jwtService: JwtService,
   ) {}
 
   async login(loginRCSDdto: R.LoginRCSdto): Promise<AccessTokenValue | null> {
     const loginSDdto = new S.LoginSDdto(loginRCSDdto.login);
-    const user = await this.usersService.getUser(loginSDdto);
+    const user = await this.dbUsersService.readOneUser(loginSDdto);
     if (
       !user ||
       !(await bcrypt.compare(loginRCSDdto.password, user.password))
@@ -37,12 +37,12 @@ export class AuthService {
       signUpRCSdto,
       hashedPassword,
     );
-    const newUser = await this.usersService.createUser(signUpSDdto);
+    const newUser = await this.dbUsersService.createUser(signUpSDdto);
     return newUser;
   }
 
   async getMe(getMeCSdto: C.GetMeCSdto): Promise<UserDocument | null> {
-    const existingUser = await this.usersService.getUserById(getMeCSdto);
+    const existingUser = await this.dbUsersService.readUserById(getMeCSdto);
     return existingUser;
   }
 }

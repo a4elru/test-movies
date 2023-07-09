@@ -1,4 +1,4 @@
-import { ImageDocument } from './image';
+import { ImageDocument } from './entity.image';
 import { ApiProperty } from '@nestjs/swagger';
 
 const example = {

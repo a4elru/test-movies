@@ -16,7 +16,7 @@ async function bootstrap() {
     .setDescription(
       'Тестовый проект - RESTful сервис хранения сведений о фильмах.',
     )
-    .setVersion('1.0.2')
+    .setVersion('1.0.3')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/docs', app, document);

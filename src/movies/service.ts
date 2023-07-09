@@ -1,37 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Movie, MovieDocument } from './movie';
-import { MovieIdRCdto } from './dto.1.from.request';
+import { DBMoviesService } from '../_db/movies/service';
+import { DBImagesService } from '../_db/images/service';
+import { StaticService } from '../_static/service';
+import { MovieDocument } from '../_db/movies/entity.movie';
+import { ImageDocument } from '../_db/images/entity.image';
+import { MovieIdRCdto, ImageIdRCdto } from './dto.1.from.request';
 import * as CS from './dto.2.from.controller';
-import { ImagesService } from 'src/_images/service';
-import { StaticService } from 'src/_static/service';
-import { ImageDocument } from 'src/_images/image';
-import { ImageIdSDdto, MovieIdSDdto } from './dto.3.from.service';
-import { ImageIdRCdto } from './dto.1.from.request';
+import * as SD from './dto.3.from.service';
 
 @Injectable()
 export class MoviesService {
   constructor(
-    @InjectModel(Movie.name) private movieModel: Model<Movie>,
-    private readonly imagesService: ImagesService,
+    private readonly dbMoviesService: DBMoviesService,
+    private readonly dbImagesService: DBImagesService,
     private readonly staticService: StaticService,
   ) {}
 
   async createMovie(
     createMovieCSdto: CS.CreateMovieCSdto,
   ): Promise<MovieDocument> {
-    const newMovie = new this.movieModel(createMovieCSdto);
-    return await newMovie.save();
+    const newMovie = await this.dbMoviesService.createMovie(createMovieCSdto);
+    return newMovie;
   }
 
-  async getAllMovies(): Promise<MovieDocument[]> {
-    const allMovies = await this.movieModel.find();
+  async readAllMovies(): Promise<MovieDocument[]> {
+    const allMovies = await this.dbMoviesService.readAllMovies();
     return allMovies;
   }
 
-  async getMovie(movieIdCSdto: MovieIdRCdto): Promise<MovieDocument | null> {
-    const existingMovie = await this.movieModel.findById(movieIdCSdto.movieId);
+  async readMovieById(
+    movieIdCSdto: MovieIdRCdto,
+  ): Promise<MovieDocument | null> {
+    const movieIdSDdto = new SD.ToMovies_MovieIdSDdto(movieIdCSdto);
+    const existingMovie = await this.dbMoviesService.readMovieById(
+      movieIdSDdto,
+    );
     return existingMovie;
   }
 
@@ -39,17 +42,18 @@ export class MoviesService {
     movieIdCSdto: MovieIdRCdto,
     updateMovieCSdto: CS.UpdateMovieCSdto,
   ): Promise<MovieDocument | null> {
-    const existingMovie = await this.movieModel.findByIdAndUpdate(
-      movieIdCSdto.movieId,
+    const movieIdSDdto = new SD.ToMovies_MovieIdSDdto(movieIdCSdto);
+    const updatedMovie = await this.dbMoviesService.updateMovieById(
+      movieIdSDdto,
       updateMovieCSdto,
-      { new: true },
     );
-    return existingMovie;
+    return updatedMovie;
   }
 
   async deleteMovie(movieIdCSdto: MovieIdRCdto): Promise<MovieDocument | null> {
-    const deletedMovie = await this.movieModel.findByIdAndDelete(
-      movieIdCSdto.movieId,
+    const movieIdSDdto = new SD.ToMovies_MovieIdSDdto(movieIdCSdto);
+    const deletedMovie = await this.dbMoviesService.deleteMovieById(
+      movieIdSDdto,
     );
     return deletedMovie;
   }
@@ -58,8 +62,8 @@ export class MoviesService {
     movieIdCSdto: MovieIdRCdto,
     file: Express.Multer.File,
   ): Promise<ImageDocument> {
-    const movieIdSDdto = new MovieIdSDdto(movieIdCSdto);
-    const createdImage = await this.imagesService.createImage(movieIdSDdto);
+    const movieIdSDdto = new SD.ToImages_MovieIdSDdto(movieIdCSdto);
+    const createdImage = await this.dbImagesService.createImage(movieIdSDdto);
     const imageId = createdImage._id.toString();
     // todo: if saving is failed - intercept error, back changes
     await this.staticService.saveImage(imageId, file);
@@ -67,8 +71,10 @@ export class MoviesService {
   }
 
   async deleteImage(imageIdRCdto: ImageIdRCdto) {
-    const imageIdSDdto = new ImageIdSDdto(imageIdRCdto);
-    const deletedImage = await this.imagesService.deleteImageById(imageIdSDdto);
+    const imageIdSDdto = new SD.ToImages_ImageIdSDdto(imageIdRCdto);
+    const deletedImage = await this.dbImagesService.deleteImageById(
+      imageIdSDdto,
+    );
     if (!deletedImage) {
       return deletedImage;
     }
@@ -78,14 +84,16 @@ export class MoviesService {
   }
 
   async getImage(imageIdRCdto: ImageIdRCdto) {
-    const imageIdSDdto = new ImageIdSDdto(imageIdRCdto);
-    const existingImage = await this.imagesService.getImageById(imageIdSDdto);
+    const imageIdSDdto = new SD.ToImages_ImageIdSDdto(imageIdRCdto);
+    const existingImage = await this.dbImagesService.readImageById(
+      imageIdSDdto,
+    );
     return existingImage;
   }
 
   async getImages(movieIdCSdto: MovieIdRCdto) {
-    const movieIdSDdto = new MovieIdSDdto(movieIdCSdto);
-    const images = await this.imagesService.getImagesByMovieId(movieIdSDdto);
+    const movieIdSDdto = new SD.ToImages_MovieIdSDdto(movieIdCSdto);
+    const images = await this.dbImagesService.readImages(movieIdSDdto);
     return images;
   }
 }
